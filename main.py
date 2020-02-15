@@ -76,13 +76,14 @@ def parsePages(pages, preq, wsh):
             print array_vals
             global g_rw
             g_rw += 1
+            wsh.write(g_rw, 0, listtr.xpath('//div[@class="b-justice"]/text()')[0])
             wsh.write(g_rw, 1, findHeader(tr))
             wsh.write(g_rw, 2, url)
             writeArr(array_vals, g_rw, 3, wsh)
 
 g_rw = 0
-pagefrom = 0
-pagecount = 13
+pagefrom = 32
+pagecount = 51
 workbook = xlsxwriter.Workbook('Expenses' + str(pagefrom) + '.xlsx')
 worksheet = workbook.add_worksheet()
 
