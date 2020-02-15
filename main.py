@@ -81,7 +81,9 @@ def parsePages(pages, preq, wsh):
             writeArr(array_vals, g_rw, 3, wsh)
 
 g_rw = 0
-workbook = xlsxwriter.Workbook('Expenses01.xlsx')
+pagefrom = 0
+pagecount = 13
+workbook = xlsxwriter.Workbook('Expenses' + str(pagefrom) + '.xlsx')
 worksheet = workbook.add_worksheet()
 
 pagereq = {'regular-txt': '', 'regular-case_doc': '',
@@ -89,13 +91,16 @@ pagereq = {'regular-txt': '', 'regular-case_doc': '',
            'regular-date_from': '01.02.2009', 'regular-date_to': '11.02.2020', 'regular-workflow_stage': '',
            'regular-area': '1013', 'regular-court': '', 'regular-judge': '', '_': '1581376199542'}
 
-pagecount = 12
 
-for i in range(pagecount):
+for i in range(pagefrom, pagecount):
     payload = {'page': i, 'regular-txt': '', 'regular-case_doc': '', 'regular-lawchunkinfo': 'Статья 156. Неисполнение обязанностей по воспитанию несовершеннолетнего(УК РФ)', 'regular-date_from': '01.02.2009', 'regular-date_to': '11.02.2020', 'regular-workflow_stage': '10', 'regular-area': '', 'regular-court': '', 'regular-judge': '', '_': '1581376199542'}
     listurl = 'https://sudact.ru/regular/doc_ajax/'
     listr = requests.get(listurl, verify=False, params=payload)
+    print "page: ", i
+    print listr
     listtxt = listr.text.encode('utf-8')
+    if listtxt[0] == '<' and listtxt[1] == '!':
+        workbook.close()
     ptxt = json.loads(listtxt)
     cptxt = ptxt['content']
     cptxt = '<html><head></head><body>' + cptxt + '</body></html>'
